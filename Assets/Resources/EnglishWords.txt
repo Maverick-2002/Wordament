@@ -1,1 +1,0 @@
-vento,arvore,folha,animal,planta,raiz,terra,grama,lago,oceano,rio
