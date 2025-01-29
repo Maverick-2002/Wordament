@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class WordHunt : MonoBehaviour {
+public class WordHunt : MonoBehaviour
+{
 
     public static WordHunt instance;
 
@@ -61,8 +62,9 @@ public class WordHunt : MonoBehaviour {
         instance = this;
     }
 
-    public void Setup(){
-        
+    public void Setup()
+    {
+
         PrepareWords();
 
         InitializeGrid();
@@ -82,10 +84,10 @@ public class WordHunt : MonoBehaviour {
     }
     private void PrepareWords()
     {
-        //Pegar lista de palavras
+        // Get list of words
         words = wordsSource.text.Split(',').ToList();
 
-        //Filtrar palavrões e etc..
+        // Filter out bad words, etc.
         if (filterBadWords)
         {
             List<string> badWords = JsonUtility.FromJson<BadWordsData>(badWordsSource.text).badWords;
@@ -94,12 +96,12 @@ public class WordHunt : MonoBehaviour {
                 if (words.Contains(badWords[i]))
                 {
                     words.Remove(badWords[i]);
-                    print("palavra ofensiva <b>" + badWords[i] + "</b> <color=red> removida</color>");
+                    print("Offensive word <b>" + badWords[i] + "</b> <color=red>removed</color>");
                 }
             }
         }
 
-        //Randomizar palavras
+        // Shuffle words
         for (int i = 0; i < words.Count; i++)
         {
             string temp = words[i];
@@ -111,21 +113,21 @@ public class WordHunt : MonoBehaviour {
             words[randomIndex] = temp;
         }
 
-        //Filtrar as palavras que cabem na grid
+        // Filter words that fit in the grid
         int maxGridDimension = Mathf.Max((int)gridSize.x, (int)gridSize.y);
 
-        //Que palavras da lista cabem no grid
+        // Which words fit in the grid
         words = words.Where(x => x.Length <= maxGridDimension).ToList();
     }
 
     private void InitializeGrid()
     {
 
-        //Inicializar o tamanho dos arrays bidimensionais
+        // Initialize the size of the 2D arrays
         lettersGrid = new string[(int)gridSize.x, (int)gridSize.y];
         lettersTransforms = new Transform[(int)gridSize.x, (int)gridSize.y];
 
-        //Passar por todos os elementos x e y da grid
+        // Loop through all elements in the grid (x and y)
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
@@ -155,8 +157,6 @@ public class WordHunt : MonoBehaviour {
         int cellSizeX = (int)gridLayout.cellSize.x + (int)gridLayout.spacing.x;
 
         transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(cellSizeX * gridSize.x, 0);
-
-
     }
 
     void InsertWordsOnGrid()
@@ -182,7 +182,9 @@ public class WordHunt : MonoBehaviour {
                     {
                         dirX = rn.Next(3) - 1;
                         dirY = rn.Next(3) - 1;
-                    }else{
+                    }
+                    else
+                    {
                         dirX = rn.Next(2);
                         dirY = rn.Next(2);
                     }
@@ -300,7 +302,7 @@ public class WordHunt : MonoBehaviour {
             word += t.GetComponentInChildren<Text>().text.ToLower();
         }
 
-        if(insertedWords.Contains(word) || insertedWords.Contains(Reverse(word)))
+        if (insertedWords.Contains(word) || insertedWords.Contains(Reverse(word)))
         {
             foreach (Transform h in highlightedObjects)
             {
@@ -308,7 +310,7 @@ public class WordHunt : MonoBehaviour {
                 h.transform.DOPunchScale(-Vector3.one, 0.2f, 10, 1);
             }
 
-            //Visual Event
+            // Visual Event
             RectTransform r1 = highlightedObjects[0].GetComponent<RectTransform>();
             RectTransform r2 = highlightedObjects[highlightedObjects.Count() - 1].GetComponent<RectTransform>();
             FoundWord(r1, r2);
@@ -320,12 +322,13 @@ public class WordHunt : MonoBehaviour {
             insertedWords.Remove(word);
             insertedWords.Remove(Reverse(word));
 
-            if(insertedWords.Count <= 0)
+            if (insertedWords.Count <= 0)
             {
                 Finish();
             }
         }
-        else {
+        else
+        {
             ClearWordSelection();
         }
     }
@@ -337,7 +340,7 @@ public class WordHunt : MonoBehaviour {
             dir = new Vector2(x, y);
             if (IsLetterAligned(x, y))
             {
-                HighlightSelectedLetters(x,y);
+                HighlightSelectedLetters(x, y);
             }
         }
     }
