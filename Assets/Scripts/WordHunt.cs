@@ -75,6 +75,11 @@ public class WordHunt : MonoBehaviour {
 
     }
 
+    [System.Serializable]
+    public class BadWordsData
+    {
+        public List<string> badWords;
+    }
     private void PrepareWords()
     {
         //Pegar lista de palavras
@@ -83,10 +88,11 @@ public class WordHunt : MonoBehaviour {
         //Filtrar palavrões e etc..
         if (filterBadWords)
         {
-            List<string> badWords = badWordsSource.text.Split(',').ToList();
-            for (int i = 0; i < badWords.Count(); i++)
+            List<string> badWords = JsonUtility.FromJson<BadWordsData>(badWordsSource.text).badWords;
+            for (int i = 0; i < badWords.Count; i++)
             {
-                if(words.Contains(badWords[i])){
+                if (words.Contains(badWords[i]))
+                {
                     words.Remove(badWords[i]);
                     print("palavra ofensiva <b>" + badWords[i] + "</b> <color=red> removida</color>");
                 }
