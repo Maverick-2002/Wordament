@@ -173,7 +173,7 @@ public class WordHunt : MonoBehaviour
         {
 
             System.Random rn = new System.Random();
-
+           
             bool inserted = false;
             int tryAmount = 0;
 
@@ -204,8 +204,11 @@ public class WordHunt : MonoBehaviour
             } while (!inserted && tryAmount < 100);
 
             if (inserted)
+            {
                 insertedWords.Add(word);
-        }
+                Debug.Log(word);
+            }
+            }
     }
 
     private bool InsertWord(string word, int row, int column, int dirX, int dirY)
