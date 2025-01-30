@@ -206,7 +206,6 @@ public class WordHunt : MonoBehaviour
             if (inserted)
             {
                 insertedWords.Add(word);
-                Debug.Log(word);
             }
             }
     }
