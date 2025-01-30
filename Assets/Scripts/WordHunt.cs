@@ -78,14 +78,22 @@ public class WordHunt : MonoBehaviour
     }
 
     [System.Serializable]
+    public class WordListData
+    {
+        public List<string> words;
+    }
+
+    [System.Serializable]
     public class BadWordsData
     {
         public List<string> badWords;
     }
+
     private void PrepareWords()
     {
-        // Get list of words
-        words = wordsSource.text.Split(',').ToList();
+        // Load words from JSON
+        WordListData wordData = JsonUtility.FromJson<WordListData>(wordsSource.text);
+        words = wordData.words;
 
         // Filter out bad words, etc.
         if (filterBadWords)
