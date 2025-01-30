@@ -11,7 +11,7 @@ public class WordHunt : MonoBehaviour
 {
 
     public static WordHunt instance;
-
+    public GameObject endscene;
     public delegate void VisualEvents(RectTransform original, RectTransform final);
     public static event VisualEvents FoundWord;
 
@@ -60,6 +60,10 @@ public class WordHunt : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
+    public void Start()
+    {
+        endscene.SetActive(false);
     }
 
     public void Setup()
@@ -335,6 +339,7 @@ public class WordHunt : MonoBehaviour
             if (insertedWords.Count <= 0)
             {
                 Finish();
+                endscene.SetActive(true);
             }
         }
         else
