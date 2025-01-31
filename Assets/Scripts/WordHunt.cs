@@ -452,11 +452,9 @@ public class WordHunt : MonoBehaviour
     private void UpdateCanvasBasedOnOrientation()
     {
         lastwidth = Screen.width;
-
         if (Screen.width < Screen.height)
         {
             hvlayout.isVertical = true;
-
         }
         else 
         {
