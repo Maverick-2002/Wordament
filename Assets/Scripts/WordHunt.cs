@@ -14,9 +14,10 @@ public class WordHunt : MonoBehaviour
     public GameObject endscene;
     public delegate void VisualEvents(RectTransform original, RectTransform final);
     public static event VisualEvents FoundWord;
-
+    private HVLayoutGroup hvlayout;
     public delegate void Events();
     public static event Events Finish;
+    private int lastwidth;
 
     private string[,] lettersGrid;
     private Transform[,] lettersTransforms;
@@ -64,6 +65,14 @@ public class WordHunt : MonoBehaviour
     public void Start()
     {
         endscene.SetActive(false);
+        hvlayout = GetComponent<HVLayoutGroup>();
+    }
+    public void Update()
+    {
+        if (Screen.width != lastwidth)
+        {
+            UpdateCanvasBasedOnOrientation();
+        }
     }
 
     public void Setup()
@@ -131,7 +140,7 @@ public class WordHunt : MonoBehaviour
         // Which words fit in the grid
         words = words.Where(x => x.Length <= maxGridDimension).ToList();
     }
-
+  
     private void InitializeGrid()
     {
 
@@ -439,5 +448,19 @@ public class WordHunt : MonoBehaviour
         Array.Reverse(charArray);
         return new string(charArray);
     }
+ 
+    private void UpdateCanvasBasedOnOrientation()
+    {
+        lastwidth = Screen.width;
 
+        if (Screen.width < Screen.height)
+        {
+            hvlayout.isVertical = true;
+
+        }
+        else 
+        {
+            hvlayout.isVertical= false;
+        }
+    }
 }
