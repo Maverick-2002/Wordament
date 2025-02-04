@@ -96,11 +96,13 @@ public class WordHunt : MonoBehaviour
         {
             print(wordlist.words[i]);
         }
+
+        PrepareWords(wordlist.words);
     }
     public void Setup()
     {
 
-        PrepareWords();
+        //PrepareWords();
 
         InitializeGrid();
 
@@ -124,11 +126,10 @@ public class WordHunt : MonoBehaviour
         public List<string> badWords;
     }
 
-    private void PrepareWords()
+    private void PrepareWords(List<string> receivedWords)
     {
         // Load words from JSON
-        WordListData wordData = JsonUtility.FromJson<WordListData>(wordsSource.text);
-        words = wordData.words;
+        words = receivedWords;
 
         // Filter out bad words, etc.
         if (filterBadWords)
