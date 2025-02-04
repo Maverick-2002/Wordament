@@ -6,9 +6,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Runtime.InteropServices;
 
 public class WordHunt : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void FetchWordsFromFirebase();
 
     public static WordHunt instance;
     public GameObject endscene;
@@ -64,6 +67,10 @@ public class WordHunt : MonoBehaviour
     }
     public void Start()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            FetchWordsFromFirebase(); // Calls JS function in WebGL
+#endif
+
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
     }
@@ -74,7 +81,22 @@ public class WordHunt : MonoBehaviour
             UpdateCanvasBasedOnOrientation();
         }
     }
+    public class Wordlist
+    {
+        public List<string> words;
+    }
 
+    public void OnWordsReceived(string words)
+    {
+        print("Received words from Firebase: " + words);
+        Wordlist wordlist = new Wordlist();
+        wordlist = JsonUtility.FromJson<Wordlist>(words);
+
+        for (int i = 0; i < wordlist.words.Count; i++)
+        {
+            print(wordlist.words[i]);
+        }
+    }
     public void Setup()
     {
 
