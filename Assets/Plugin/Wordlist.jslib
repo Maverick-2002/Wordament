@@ -3,11 +3,11 @@ mergeInto(LibraryManager.library, {
     if (!firebase.apps.length) {
       firebase.initializeApp({
         apiKey: "AIzaSyCu_oqDfhyVmQ9HymU2cuaPPZD2Oi-imPs",
-  authDomain: "wordament-16b5a.firebaseapp.com",
-  projectId: "wordament-16b5a",
-  storageBucket: "wordament-16b5a.firebasestorage.app",
-  messagingSenderId: "828815934558",
-  appId: "1:828815934558:web:66dab8993514321e4fa0cf"
+        authDomain: "wordament-16b5a.firebaseapp.com",
+        projectId: "wordament-16b5a",
+        storageBucket: "wordament-16b5a.firebasestorage.app",
+        messagingSenderId: "828815934558",
+        appId: "1:828815934558:web:66dab8993514321e4fa0cf"
       });
     }
 
@@ -17,10 +17,7 @@ mergeInto(LibraryManager.library, {
       if (doc.exists) {
         console.log(doc.data());
         var wordsArray = doc.data(); // Fetch words
-        SendMessage('WordHunt', 'OnWordsReceived',JSON.stringify( doc.data())); // Send to Unity
-        console.log('firebase active');
-      } else {
-        console.log("No such document!");
+        SendMessage('WordHunt', 'OnWordsReceived',JSON.stringify( doc.data()));
       }
     }).catch((error) => {
       console.error("Error fetching words:", error);
