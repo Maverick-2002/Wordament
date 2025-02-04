@@ -15,6 +15,7 @@ mergeInto(LibraryManager.library, {
 
     db.collection("wordlist").doc("Testing").get().then((doc) => {
       if (doc.exists) {
+        console.log(doc.data());
         var wordsArray = doc.data().words; // Fetch words
         SendMessage('GameManager', 'OnWordsReceived', wordsArray.join(",")); // Send to Unity
         console.log('firebase active');
