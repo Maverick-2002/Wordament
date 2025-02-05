@@ -45,4 +45,12 @@ public class ScrollViewWords : MonoBehaviour {
             }
         }
     }
+    public void ResetQuizScroll()
+    {
+        // Destroy all spawned quiz cells
+        foreach (Transform child in scrollViewContent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }

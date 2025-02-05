@@ -26,9 +26,16 @@ public class QuizScroll : MonoBehaviour
         MenuScript.instance.StartGame();
         wordHuntPrefab.PrepareWords(words);
         wordHuntPrefab.Setup();
-        
-            
     }
+    public void ResetQuizScroll()
+    {
+        // Destroy all spawned quiz cells
+        foreach (Transform child in scrollViewContent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     public void SpawnQuizCell(string word, float delay)
     {
         GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);

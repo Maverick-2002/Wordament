@@ -161,7 +161,6 @@ public class WordHunt : MonoBehaviour
     {
         // Load words from JSON
         words = receivedWords;
-
         // Filter out bad words, etc.
         if (filterBadWords)
         {
@@ -175,7 +174,6 @@ public class WordHunt : MonoBehaviour
                 }
             }
         }
-
         // Shuffle words
         for (int i = 0; i < words.Count; i++)
         {
@@ -487,7 +485,6 @@ public class WordHunt : MonoBehaviour
     private void DisplaySelectedWords()
     {
         float delay = 0;
-
         for (int i = 0; i < insertedWords.Count; i++)
         {
             ScrollViewWords.instance.SpawnWordCell(insertedWords[i], delay);
@@ -506,6 +503,10 @@ public class WordHunt : MonoBehaviour
             delay += .05f;
            
         }
+    }
+    public void ClearWords()
+    {
+        words.Clear();  // Clear the word list
     }
 
     public static string Reverse(string s)
