@@ -38,6 +38,7 @@ public class WordHunt : MonoBehaviour
     [Header("List of Words")]
     public List<string> words = new List<string>();
     public List<string> insertedWords = new List<string>();
+    public List<string> CategoryWords = new List<string>();
     [Header("Grid Settings")]
     public Vector2 gridSize;
     [Space]
@@ -73,6 +74,7 @@ public class WordHunt : MonoBehaviour
 
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
+        DisplayQuizSelectedWords();
     }
     public void Update()
     {
@@ -104,6 +106,7 @@ public class WordHunt : MonoBehaviour
         foreach (var wordData in wordlist.Data)
         {
             print("Category: " + wordData.CatagoryName);
+            CategoryWords.Add(wordData.CatagoryName);
             print("Words in this category:");
             foreach (var word in wordData.words)
             {
@@ -114,6 +117,7 @@ public class WordHunt : MonoBehaviour
     }
     public void Setup()
     {
+       
 
         InitializeGrid();
 
@@ -472,6 +476,16 @@ public class WordHunt : MonoBehaviour
         for (int i = 0; i < insertedWords.Count; i++)
         {
             ScrollViewWords.instance.SpawnWordCell(insertedWords[i], delay);
+            delay += .05f;
+        }
+    }
+    private void DisplayQuizSelectedWords()
+    {
+        float delay = 0;
+
+        for (int i = 0; i < CategoryWords.Count; i++)
+        {
+            QuizScroll.instance.SpawnWordCell(CategoryWords[i], delay);
             delay += .05f;
         }
     }
