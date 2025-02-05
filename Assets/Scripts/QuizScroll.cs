@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
+using System.Reflection;
 
 public class QuizScroll : MonoBehaviour
 {
@@ -10,6 +12,9 @@ public class QuizScroll : MonoBehaviour
     public static QuizScroll instance;
     public GameObject wordCellPrefab;
     public Transform scrollViewContent;
+    public WordHunt wordHuntPrefab;
+    public GameObject cell;
+    public Button cellButton;
     private void Awake()
     {
         instance = this;
@@ -19,7 +24,8 @@ public class QuizScroll : MonoBehaviour
     }
     public void SpawnQuizCell(string word, float delay)
     {
-        GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);
+        cell = Instantiate(wordCellPrefab, scrollViewContent);
+        cellButton = cell.GetComponent<Button>();
         cell.GetComponentInChildren<Text>().text = word.ToUpper();
         cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutBack).From().SetDelay(delay);
     }
