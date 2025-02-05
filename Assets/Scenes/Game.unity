@@ -848,7 +848,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &421839264
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16785,12 +16785,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69cd1f7c819c949849e453eaf17e1702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons:
-  - {fileID: 1949841431}
-  - {fileID: 1806097210}
-  themes:
-  - {fileID: 4900000, guid: 1bef6404056ea8c48ab5d929128ff283, type: 3}
-  - {fileID: 4900000, guid: 83f4811745ac3d34da84e7df16da7e25, type: 3}
   miniMenu: {fileID: 1480231626}
 --- !u!225 &1149679261
 CanvasGroup:
@@ -17614,15 +17608,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.4}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
