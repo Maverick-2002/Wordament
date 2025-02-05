@@ -25,6 +25,7 @@ public class MenuScript : MonoBehaviour {
             buttons[index].onClick.AddListener(()=>StartGame(index));
             buttons[index].GetComponentInChildren<Text>().text = themes[index].name.ToUpper();
         }
+       
     }
 
     public void StartGame(int index){

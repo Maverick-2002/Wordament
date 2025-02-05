@@ -74,7 +74,6 @@ public class WordHunt : MonoBehaviour
 
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
-        DisplayQuizSelectedWords();
     }
     public void Update()
     {
@@ -460,7 +459,6 @@ public class WordHunt : MonoBehaviour
         {
             h.GetComponent<Image>().color = Color.white;
         }
-
         highlightedObjects.Clear();
     }
 
@@ -479,13 +477,13 @@ public class WordHunt : MonoBehaviour
             delay += .05f;
         }
     }
-    private void DisplayQuizSelectedWords()
+    public void DisplayQuizSelectedWords()
     {
         float delay = 0;
 
         for (int i = 0; i < CategoryWords.Count; i++)
         {
-            QuizScroll.instance.SpawnWordCell(CategoryWords[i], delay);
+            QuizScroll.instance.SpawnQuizCell(CategoryWords[i], delay);
             delay += .05f;
         }
     }
