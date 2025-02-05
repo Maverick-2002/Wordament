@@ -100,17 +100,18 @@ public class WordHunt : MonoBehaviour
     public void OnWordsReceived(string wordsJson)
     {
         print("Received words from Firebase: " + wordsJson);
-
-        // Parse the new data structure
         Wordlist wordlist = JsonUtility.FromJson<Wordlist>(wordsJson);
-        print(wordlist.Data[0].CatagoryName);
-        // Iterate through the categories and extract the words
         foreach (var wordData in wordlist.Data)
         {
-            print("Word: " + wordData.words);
+            print("Category: " + wordData.CatagoryName);
+            print("Words in this category:");
+            foreach (var word in wordData.words)
+            {
+                print(word);
+            }
+            PrepareWords(wordData.words);
         }
     }
-  
     public void Setup()
     {
 
