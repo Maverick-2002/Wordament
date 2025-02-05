@@ -81,16 +81,20 @@ public class WordHunt : MonoBehaviour
             UpdateCanvasBasedOnOrientation();
         }
     }
+   
+    [System.Serializable]
     public class Wordlist
     {
-        [System.Serializable]
-        public class WordData
-        {
-            public string CategoryName;
-            public List<string> words;
-        }
-
+        [SerializeField]
         public List<WordData> Data;
+
+        
+    }
+    [System.Serializable]
+    public class WordData
+    {
+        public List<string> words;
+        public string CatagoryName;
     }
 
     public void OnWordsReceived(string wordsJson)
@@ -99,25 +103,16 @@ public class WordHunt : MonoBehaviour
 
         // Parse the new data structure
         Wordlist wordlist = JsonUtility.FromJson<Wordlist>(wordsJson);
-
+        print(wordlist.Data[0].CatagoryName);
         // Iterate through the categories and extract the words
         foreach (var wordData in wordlist.Data)
         {
-            string cat = wordData.CategoryName;
-            print("Category: " + cat);
-            foreach (var word in wordData.words)
-            {
-                print("Word: " + word);
-            }
-
-            // Now prepare the words
-            PrepareWords(wordData.words);
+            print("Word: " + wordData.words);
         }
     }
+  
     public void Setup()
     {
-
-        //PrepareWords();
 
         InitializeGrid();
 
