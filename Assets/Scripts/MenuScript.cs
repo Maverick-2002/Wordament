@@ -9,29 +9,32 @@ public class MenuScript : MonoBehaviour {
 
     private CanvasGroup canvas;
 
-    public Button[] buttons;
-    public TextAsset[] themes;
-
+   // public Button[] buttons;
+  //  public TextAsset[] themes;
+    public static MenuScript instance;
     public Transform miniMenu;
 
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         canvas = GetComponent<CanvasGroup>();
         canvas.alpha = 1;
 
-        for (int i = 0; i < buttons.Length; i++)
+        /*for (int i = 0; i < buttons.Length; i++)
         {
             int index = i;
             buttons[index].onClick.AddListener(()=>StartGame(index));
             buttons[index].GetComponentInChildren<Text>().text = themes[index].name.ToUpper();
-        }
+        }*/
        
     }
 
-    public void StartGame(int index){
+    public void StartGame(){
 
-        WordHunt.instance.wordsSource = themes[index];
-        WordHunt.instance.Setup();
+    
 
         canvas.alpha = 0;
         canvas.blocksRaycasts = false;

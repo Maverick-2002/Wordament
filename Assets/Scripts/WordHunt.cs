@@ -97,27 +97,44 @@ public class WordHunt : MonoBehaviour
         public List<string> words;
         public string CatagoryName;
     }
+    public static class WordDataStore
+    {
+        public static List<string> CategoryWords = new List<string>();
+        public static Dictionary<string, List<string>> CategoryWordMap = new Dictionary<string, List<string>>();
+    }
 
     public void OnWordsReceived(string wordsJson)
     {
         print("Received words from Firebase: " + wordsJson);
         Wordlist wordlist = JsonUtility.FromJson<Wordlist>(wordsJson);
+        DisplayQuizSelectedWords();
         foreach (var wordData in wordlist.Data)
         {
             print("Category: " + wordData.CatagoryName);
             CategoryWords.Add(wordData.CatagoryName);
+
+            WordDataStore.CategoryWords.Add(wordData.CatagoryName);  // Store category names
             print("Words in this category:");
+
+            // Store words associated with the category
+            if (!WordDataStore.CategoryWordMap.ContainsKey(wordData.CatagoryName))
+            {
+                WordDataStore.CategoryWordMap[wordData.CatagoryName] = new List<string>();
+            }
+
             foreach (var word in wordData.words)
             {
                 print(word);
+                WordDataStore.CategoryWordMap[wordData.CatagoryName].Add(word);  // Store words for the category
             }
-            PrepareWords(wordData.words);
+
+            //PrepareWords(wordData.words);
         }
     }
+
     public void Setup()
     {
        
-
         InitializeGrid();
 
         InsertWordsOnGrid();
@@ -140,7 +157,7 @@ public class WordHunt : MonoBehaviour
         public List<string> badWords;
     }
 
-    private void PrepareWords(List<string> receivedWords)
+    public void PrepareWords(List<string> receivedWords)
     {
         // Load words from JSON
         words = receivedWords;
@@ -479,12 +496,15 @@ public class WordHunt : MonoBehaviour
     }
     public void DisplayQuizSelectedWords()
     {
+        
         float delay = 0;
-
+        print(CategoryWords.Count);
         for (int i = 0; i < CategoryWords.Count; i++)
         {
+            print("Testing");
             QuizScroll.instance.SpawnQuizCell(CategoryWords[i], delay);
             delay += .05f;
+           
         }
     }
 

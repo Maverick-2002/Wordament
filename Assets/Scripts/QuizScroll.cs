@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using System.Reflection;
+using static WordHunt;
 
 public class QuizScroll : MonoBehaviour
 {
@@ -12,21 +13,29 @@ public class QuizScroll : MonoBehaviour
     public static QuizScroll instance;
     public GameObject wordCellPrefab;
     public Transform scrollViewContent;
-    public WordHunt wordHuntPrefab;
-    public GameObject cell;
-    public Button cellButton;
+    private WordHunt wordHuntPrefab;
+
     private void Awake()
     {
         instance = this;
-       /* rect = GetComponent<RectTransform>();
-        WordHunt wh = WordHunt.instance;
-        rect.sizeDelta = new Vector2(rect.sizeDelta.x, (wh.cellSize.y + wh.cellSpacing.y) * wh.gridSize.y);*/
+        wordHuntPrefab = WordHunt.instance;
+    }
+    public void SpawnWordsFromCategory(string categoryName)
+    {
+        List<string> words = WordDataStore.CategoryWordMap[categoryName];
+        MenuScript.instance.StartGame();
+        wordHuntPrefab.PrepareWords(words);
+        wordHuntPrefab.Setup();
+        
+            
     }
     public void SpawnQuizCell(string word, float delay)
     {
-        cell = Instantiate(wordCellPrefab, scrollViewContent);
-        cellButton = cell.GetComponent<Button>();
+        GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);
+        print("Button spawned");
+        Button cellButton = cell.GetComponent<Button>();
         cell.GetComponentInChildren<Text>().text = word.ToUpper();
+        cellButton.onClick.AddListener(() => SpawnWordsFromCategory(word));
         cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutBack).From().SetDelay(delay);
     }
 }
