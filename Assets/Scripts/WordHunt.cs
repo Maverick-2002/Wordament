@@ -426,9 +426,7 @@ public class WordHunt : MonoBehaviour
     {
 
         ClearWordSelection();
-
         Color selectColor = HighlightBehaviour.instance.colors[HighlightBehaviour.instance.colorCounter];
-
         if (x == orig.x)
         {
             int min = (int)Math.Min(y, orig.y);
@@ -468,7 +466,6 @@ public class WordHunt : MonoBehaviour
         }
 
     }
-
     private void ClearWordSelection()
     {
         foreach (Transform h in highlightedObjects)
@@ -477,12 +474,10 @@ public class WordHunt : MonoBehaviour
         }
         highlightedObjects.Clear();
     }
-
     public bool IsLetterAligned(int x, int y)
     {
         return (orig.x == x || orig.y == y || Math.Abs(orig.x - x) == Math.Abs(orig.y - y));
     }
-
     private void DisplaySelectedWords()
     {
         float delay = 0;
@@ -509,14 +504,12 @@ public class WordHunt : MonoBehaviour
     {
         words.Clear();  // Clear the word list
     }
-
     public static string Reverse(string s)
     {
         char[] charArray = s.ToCharArray();
         Array.Reverse(charArray);
         return new string(charArray);
     }
- 
     private void UpdateCanvasBasedOnOrientation()
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
