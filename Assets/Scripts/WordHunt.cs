@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Runtime.InteropServices;
+using UnityEngine.Rendering;
 
 public class WordHunt : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class WordHunt : MonoBehaviour
     private HVLayoutGroup hvlayout;
     public delegate void Events();
     public static event Events Finish;
-    private int lastwidth;
+    private int lastwidth = 0;
 
     private string[,] lettersGrid;
     private Transform[,] lettersTransforms;
@@ -59,9 +60,11 @@ public class WordHunt : MonoBehaviour
     public Vector2 dir;
     public bool activated;
 
+
     [HideInInspector]
     public List<Transform> highlightedObjects = new List<Transform>();
 
+  
     private void Awake()
     {
         instance = this;
@@ -77,7 +80,7 @@ public class WordHunt : MonoBehaviour
     }
     public void Update()
     {
-        if (Screen.width != lastwidth)
+       if (Screen.width != lastwidth)
         {
             UpdateCanvasBasedOnOrientation();
         }
@@ -88,8 +91,6 @@ public class WordHunt : MonoBehaviour
     {
         [SerializeField]
         public List<WordData> Data;
-
-        
     }
     [System.Serializable]
     public class WordData
@@ -127,8 +128,6 @@ public class WordHunt : MonoBehaviour
                 print(word);
                 WordDataStore.CategoryWordMap[wordData.CatagoryName].Add(word);  // Store words for the category
             }
-
-            //PrepareWords(wordData.words);
         }
     }
 
@@ -143,6 +142,7 @@ public class WordHunt : MonoBehaviour
 
         DisplaySelectedWords();
 
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
 
     [System.Serializable]
@@ -353,6 +353,7 @@ public class WordHunt : MonoBehaviour
                 }
             }
         }
+
     }
 
     public void LetterClick(int x, int y, bool state)
@@ -518,6 +519,7 @@ public class WordHunt : MonoBehaviour
  
     private void UpdateCanvasBasedOnOrientation()
     {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         lastwidth = Screen.width;
         if (Screen.width < Screen.height)
         {
