@@ -401,7 +401,12 @@ public class WordHunt : MonoBehaviour
             if (insertedWords.Count <= 0)
             {
                 Finish();
-                endscene.SetActive(true);
+                if (insertedWords.Count <= 0)
+                {
+                    Finish();
+                    Invoke(nameof(ShowEndScene), 2f);
+                }
+                
             }
         }
         else
@@ -522,5 +527,9 @@ public class WordHunt : MonoBehaviour
         {
             hvlayout.isVertical= false;
         }
+    }
+    public void ShowEndScene()
+    {
+        endscene.SetActive(true);
     }
 }
