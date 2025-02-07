@@ -400,13 +400,8 @@ public class WordHunt : MonoBehaviour
 
             if (insertedWords.Count <= 0)
             {
-                Finish();
-                if (insertedWords.Count <= 0)
-                {
                     Finish();
                     Invoke(nameof(ShowEndScene), 2f);
-                }
-                
             }
         }
         else
