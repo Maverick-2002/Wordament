@@ -13,11 +13,11 @@ mergeInto(LibraryManager.library, {
 
     var db = firebase.firestore();
 
-    db.collection("wordlist").doc("Testing").get().then((doc) => {
+    db.collection("wordlist").doc("Testing").get().then(async(doc) => {
       if (doc.exists) {
         console.log(doc.data());
-        var wordsArray = doc.data(); // Fetch words
-        SendMessage('WordHunt', 'OnWordsReceived',JSON.stringify( doc.data()));
+        var wordsArray = await doc.data(); // Fetch words
+        SendMessage('WordHunt', 'OnWordsReceived',JSON.stringify( wordsArray));
       }
     }).catch((error) => {
       console.error("Error fetching words:", error);
