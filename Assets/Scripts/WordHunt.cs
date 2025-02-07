@@ -22,6 +22,7 @@ public class WordHunt : MonoBehaviour
     public delegate void Events();
     public static event Events Finish;
     private int lastwidth = 0;
+    public ParticleSystem finish;
 
     private string[,] lettersGrid;
     private Transform[,] lettersTransforms;
@@ -401,6 +402,7 @@ public class WordHunt : MonoBehaviour
             if (insertedWords.Count <= 0)
             {
                     Finish();
+                    finish.Play();
                     Invoke(nameof(ShowEndScene), 2f);
             }
         }
