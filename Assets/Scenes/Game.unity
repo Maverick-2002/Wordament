@@ -874,10 +874,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 708896434}
-        m_TargetAssemblyTypeName: LeaderBoard, Assembly-CSharp
-        m_MethodName: SpawnLeaderBoard
-        m_Mode: 4
+      - m_Target: {fileID: 777829246}
+        m_TargetAssemblyTypeName: WordHunt, Assembly-CSharp
+        m_MethodName: DisplayLeaderBoard
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12064,7 +12064,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endscene: {fileID: 1435164309}
-  finish: {fileID: 1685826276}
   invertedWordsAreValid: 0
   wordsSource: {fileID: 0}
   filterBadWords: 1
@@ -17794,7 +17793,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1199194673
 Transform:
   m_ObjectHideFlags: 0
@@ -20246,7 +20245,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Time(min)
+  m_Text: Time(sec)
 --- !u!222 &1918540677
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -8,11 +8,19 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
+using System.Threading;
+using static WordHunt;
+using System.Net.NetworkInformation;
+using UnityEngine.SocialPlatforms;
 
 public class WordHunt : MonoBehaviour
 {
     [DllImport("__Internal")]
     private static extern void FetchWordsFromFirebase();
+
+   [DllImport("__Internal")]
+    private static extern void FetchGameResultsFromFirebase();
+
 
     public static WordHunt instance;
     public GameObject endscene;
@@ -43,6 +51,14 @@ public class WordHunt : MonoBehaviour
     public List<string> words = new List<string>();
     public List<string> insertedWords = new List<string>();
     public List<string> CategoryWords = new List<string>();
+    /* public static List<string> SName = new List<string>();
+     public static List<int> SPos = new List<int>();
+     public static List<string> STime = new List<string>();*/
+    public static class ScoreDataStore
+    {
+        public static List<UserData> UserScores = new List<UserData>();
+    }
+
     [Header("Grid Settings")]
     public Vector2 gridSize;
     [Space]
@@ -76,10 +92,13 @@ public class WordHunt : MonoBehaviour
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
             FetchWordsFromFirebase(); // Calls JS function in WebGL
+            FetchGameResultsFromFirebase();
 #endif
         print("Starting Time= "+ formattedScoreTime);
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
+        ScoreDataStore.UserScores.Clear();
+
     }
     public void Update()
     {
@@ -92,7 +111,7 @@ public class WordHunt : MonoBehaviour
             scoreTime += Time.deltaTime;
         }
     }
-   
+   //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
     [System.Serializable]
     public class Wordlist
     {
@@ -137,6 +156,49 @@ public class WordHunt : MonoBehaviour
             }
         }
     }
+    [System.Serializable]
+    public class UserInfo
+    {
+        [SerializeField]
+        public List<UserData> Info;
+    }
+    [System.Serializable]
+    public class UserData
+    {
+        public string Name;
+        public int Pos;
+        public string Time;
+    }
+    public void OnGameResultsReceived(string json)
+    {
+        print("Received data from Firebase: " + json);
+        UserInfo user = JsonUtility.FromJson<UserInfo>(json);
+        ScoreDataStore.UserScores.AddRange(user.Info);
+        ScoreDataStore.UserScores.Sort((x, y) => x.Pos.CompareTo(y.Pos));
+        foreach (var data in user.Info)
+        {
+            
+            //ScoreDataStore.UserScores.Name.Add(data.Name);
+            //ScoreDataStore.SPos.Add(data.Pos);
+            // ScoreDataStore.STime.Add(data.Time);
+            // WordDataStore.CategoryWords.Add(wordData.CatagoryName);  // Store category names
+            // print("Words in this category:");
+
+            // Store words associated with the category
+            // if (!WordDataStore.CategoryWordMap.ContainsKey(wordData.CatagoryName))
+            //{
+            //  WordDataStore.CategoryWordMap[wordData.CatagoryName] = new List<string>();
+            //}
+
+            // foreach (var word in wordData.words)
+            // {
+            //     print(word);
+            //    WordDataStore.CategoryWordMap[wordData.CatagoryName].Add(word);  // Store words for the category
+            // }
+        }
+
+    }
+    //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
 
     public void Setup()
     {
@@ -508,6 +570,19 @@ public class WordHunt : MonoBehaviour
            
         }
     }
+    public void DisplayLeaderBoard()
+    {
+        float delay = 0;
+        //print();
+        for (int i = 0; i < ScoreDataStore.UserScores.Count ; i++)
+        {
+            print("LeaderBoard Testing");
+            print(ScoreDataStore.UserScores[i]);
+            LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,ScoreDataStore.UserScores[i].Pos, ScoreDataStore.UserScores[i].Time, delay);
+            delay += .05f;
+
+        }
+    }
     public void ClearWords()
     {
         words.Clear();  // Clear the word list
@@ -538,4 +613,6 @@ public class WordHunt : MonoBehaviour
         print(formattedScoreTime);
         endscene.SetActive(true);
     }
+
+  
 }

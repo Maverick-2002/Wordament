@@ -22,14 +22,14 @@ public class LeaderBoard : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-    public void SpawnLeaderBoard(float delay)
+    public void SpawnLeaderBoard(string name, int pos , string time , float delay)
     {
         GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);
         print("LeaderBoard spawned");
         Text[] textComponents = cell.GetComponentsInChildren<Text>();
-        textComponents[0].text = "#1";
-        textComponents[1].text = "Gauraang";
-        textComponents[2].text = "0.3";
+        textComponents[0].text = pos.ToString();
+        textComponents[1].text = name;
+        textComponents[2].text = time;
 
         cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutBack).From().SetDelay(delay);
     }
