@@ -175,28 +175,6 @@ public class WordHunt : MonoBehaviour
         UserInfo user = JsonUtility.FromJson<UserInfo>(json);
         ScoreDataStore.UserScores.AddRange(user.Info);
         ScoreDataStore.UserScores.Sort((x, y) => x.Pos.CompareTo(y.Pos));
-        foreach (var data in user.Info)
-        {
-            
-            //ScoreDataStore.UserScores.Name.Add(data.Name);
-            //ScoreDataStore.SPos.Add(data.Pos);
-            // ScoreDataStore.STime.Add(data.Time);
-            // WordDataStore.CategoryWords.Add(wordData.CatagoryName);  // Store category names
-            // print("Words in this category:");
-
-            // Store words associated with the category
-            // if (!WordDataStore.CategoryWordMap.ContainsKey(wordData.CatagoryName))
-            //{
-            //  WordDataStore.CategoryWordMap[wordData.CatagoryName] = new List<string>();
-            //}
-
-            // foreach (var word in wordData.words)
-            // {
-            //     print(word);
-            //    WordDataStore.CategoryWordMap[wordData.CatagoryName].Add(word);  // Store words for the category
-            // }
-        }
-
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
 
