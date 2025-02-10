@@ -22,6 +22,9 @@ public class WordHunt : MonoBehaviour
     public delegate void Events();
     public static event Events Finish;
     private int lastwidth = 0;
+    private float scoreTime = 0f;
+    private bool gamebegin = false;
+    string formattedScoreTime = "0.0";
 
     private string[,] lettersGrid;
     private Transform[,] lettersTransforms;
@@ -74,7 +77,7 @@ public class WordHunt : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
             FetchWordsFromFirebase(); // Calls JS function in WebGL
 #endif
-
+        print("Starting Time= "+ formattedScoreTime);
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
     }
@@ -83,6 +86,10 @@ public class WordHunt : MonoBehaviour
        if (Screen.width != lastwidth)
         {
             UpdateCanvasBasedOnOrientation();
+        }
+       if (gamebegin == true)
+        {
+            scoreTime += Time.deltaTime;
         }
     }
    
@@ -480,6 +487,7 @@ public class WordHunt : MonoBehaviour
     }
     private void DisplaySelectedWords()
     {
+        gamebegin = true;
         float delay = 0;
         for (int i = 0; i < insertedWords.Count; i++)
         {
@@ -525,6 +533,9 @@ public class WordHunt : MonoBehaviour
     }
     public void ShowEndScene()
     {
+        gamebegin = false;
+        formattedScoreTime = scoreTime.ToString("F2"); 
+        print(formattedScoreTime);
         endscene.SetActive(true);
     }
 }
