@@ -24,6 +24,7 @@ public class WordHunt : MonoBehaviour
 
     public static WordHunt instance;
     public GameObject endscene;
+    public GameObject timer;
     public delegate void VisualEvents(RectTransform original, RectTransform final);
     public static event VisualEvents FoundWord;
     private HVLayoutGroup hvlayout;
@@ -98,6 +99,7 @@ public class WordHunt : MonoBehaviour
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
         ScoreDataStore.UserScores.Clear();
+        timer.SetActive(false);
 
     }
     public void Update()
@@ -109,6 +111,8 @@ public class WordHunt : MonoBehaviour
        if (gamebegin == true)
         {
             scoreTime += Time.deltaTime;
+            timer.GetComponentInChildren<Text>().text = "Time: " + scoreTime.ToString("F2");
+            
         }
     }
    //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
@@ -180,7 +184,7 @@ public class WordHunt : MonoBehaviour
 
     public void Setup()
     {
-       
+
         InitializeGrid();
 
         InsertWordsOnGrid();
@@ -528,6 +532,7 @@ public class WordHunt : MonoBehaviour
     private void DisplaySelectedWords()
     {
         gamebegin = true;
+        Timer();
         float delay = 0;
         for (int i = 0; i < insertedWords.Count; i++)
         {
@@ -591,6 +596,11 @@ public class WordHunt : MonoBehaviour
         print(formattedScoreTime);
         endscene.SetActive(true);
     }
+    public void Timer()
+    {
+        timer.SetActive(true);
+    }
+ 
 
-  
+
 }
