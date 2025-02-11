@@ -29,8 +29,7 @@ public class LeaderBoard : MonoBehaviour
         Text[] textComponents = cell.GetComponentsInChildren<Text>();
         textComponents[0].text = pos.ToString();
         textComponents[1].text = name;
-        textComponents[2].text = time.ToString();
-
+        textComponents[2].text = float.Parse(time).ToString("F2");
         cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutBack).From().SetDelay(delay);
     }
 }
