@@ -1,18 +1,9 @@
 mergeInto(LibraryManager.library, {
   // Fetch words from Firebase
   FetchWordsFromFirebase: function() {
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyCu_oqDfhyVmQ9HymU2cuaPPZD2Oi-imPs",
-        authDomain: "wordament-16b5a.firebaseapp.com",
-        projectId: "wordament-16b5a",
-        storageBucket: "wordament-16b5a.firebasestorage.app",
-        messagingSenderId: "828815934558",
-        appId: "1:828815934558:web:66dab8993514321e4fa0cf"
-      });
-    }
 
-    var db = firebase.firestore();
+    //DB Reference...
+  const db = firebase.firestore();
 
     // Fetch words from the wordlist collection
     db.collection("wordlist").doc("Testing").get().then(async (doc) => {
@@ -27,55 +18,46 @@ mergeInto(LibraryManager.library, {
   },
 
   // Fetch game results from Firebase
-  FetchGameResultsFromFirebase: function() {
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyCu_oqDfhyVmQ9HymU2cuaPPZD2Oi-imPs",
-        authDomain: "wordament-16b5a.firebaseapp.com",
-        projectId: "wordament-16b5a",
-        storageBucket: "wordament-16b5a.firebasestorage.app",
-        messagingSenderId: "828815934558",
-        appId: "1:828815934558:web:66dab8993514321e4fa0cf"
-      });
-    }
+  FetchGameResultsFromFirebase: async function() {
 
-    var db = firebase.firestore();
+    //DB Reference...
+  const db = firebase.firestore();
 
-    // Fetch game results from the gameResults collection
-    db.collection("UserInfo").doc("UserData").get().then(async (doc) => {
-      if (doc.exists) {
-        console.log(doc.data());
-        var gameResults = await doc.data(); // Fetch game results
-        SendMessage('WordHunt', 'OnGameResultsReceived', JSON.stringify(gameResults));
-      }
-    }).catch((error) => {
-      console.error("Error fetching game results:", error);
-    });
+     //Gets MQ UserId from URL Search Params
+    const searchParams=new URLSearchParams(window.location.search)
+    const userId=searchParams.get("MQ_USER");
+
+ const user=await db.collection("UserInfo").doc(userId).get();
+
+if(user.exists){
+  const userData=user.data();
+     SendMessage('WordHunt', 'OnGameResultsReceived', JSON.stringify({Name:userData.Name,id:userData.id,Time:userData.Time}));
+  return
+}
+  const userAPIResponse=await (await fetch(`https://metaqube-auth.el.r.appspot.com/user/getUserData?uid=${userId}`)).json()
+    const userData=userAPIResponse.data;
+     SendMessage('WordHunt', 'OnGameResultsReceived', JSON.stringify({Name:userData.name,id:userData._id,Time:"0"}));
   },
+  // Fetch game results from Firebase
+  CreateGameResultsFromFirebase: async function(data) {
+        //DB Reference...
+  const db = firebase.firestore();
 
-  // Update game result in Firebase
-  UpdateGameResultInFirebase: function(modifiedResult) {
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyCu_oqDfhyVmQ9HymU2cuaPPZD2Oi-imPs",
-        authDomain: "wordament-16b5a.firebaseapp.com",
-        projectId: "wordament-16b5a",
-        storageBucket: "wordament-16b5a.firebasestorage.app",
-        messagingSenderId: "828815934558",
-        appId: "1:828815934558:web:66dab8993514321e4fa0cf"
-      });
-    }
-
-    var db = firebase.firestore();
-
-    // Update the game result document in the "gameResults" collection
-    db.collection("UserInfo").doc("UserData").set(modifiedResult) // Using set() to overwrite
-      .then(() => {
-        console.log("Game result updated successfully!");
-        SendMessage('WordHunt', 'OnGameResultUpdated', 'Game result updated');
-      })
-      .catch((error) => {
-        console.error("Error updating game result:", error);
-      });
-  }
+  const parsedData=Pointer_stringify(data)
+  const { Name,
+  id,
+  Time}=JSON.parse(parsedData)
+   const user=await db.collection("UserInfo").doc(id).get();
+if(user.exists){
+  const userData=await user.ref.update({
+    Time
+  });
+  return
+}
+await db.collection("UserInfo").doc(id).set({
+  Name,
+  id,
+  Time
+})
+  },
 });

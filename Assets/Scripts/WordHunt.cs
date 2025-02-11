@@ -20,6 +20,8 @@ public class WordHunt : MonoBehaviour
 
    [DllImport("__Internal")]
     private static extern void FetchGameResultsFromFirebase();
+    [DllImport("__Internal")]
+    private static extern void CreateGameResultsFromFirebase(string _info);
 
 
     public static WordHunt instance;
@@ -83,6 +85,8 @@ public class WordHunt : MonoBehaviour
 
     [HideInInspector]
     public List<Transform> highlightedObjects = new List<Transform>();
+
+    private UserData _currentUser;
 
   
     private void Awake()
@@ -170,15 +174,16 @@ public class WordHunt : MonoBehaviour
     public class UserData
     {
         public string Name;
-        public int Pos;
         public string Time;
+        public string id;
     }
-    public void OnGameResultsReceived(string json)
+     public void OnGameResultsReceived(string json)
     {
         print("Received data from Firebase: " + json);
-        UserInfo user = JsonUtility.FromJson<UserInfo>(json);
-        ScoreDataStore.UserScores.AddRange(user.Info);
-        ScoreDataStore.UserScores.Sort((x, y) => x.Pos.CompareTo(y.Pos));
+        _currentUser = JsonUtility.FromJson<UserData>(json);
+
+    //    ScoreDataStore.UserScores.AddRange(user.Info);
+      //  ScoreDataStore.UserScores.Sort((x, y) => x.Pos.CompareTo(y.Pos));
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
 
@@ -453,6 +458,9 @@ public class WordHunt : MonoBehaviour
             {
                     Finish();
                     Invoke(nameof(ShowEndScene), 2f);
+                _currentUser.Time = scoreTime.ToString();
+                CreateGameResultsFromFirebase(JsonUtility.ToJson(_currentUser));
+
             }
         }
         else
@@ -561,7 +569,7 @@ public class WordHunt : MonoBehaviour
         {
             print("LeaderBoard Testing");
             print(ScoreDataStore.UserScores[i]);
-            LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,ScoreDataStore.UserScores[i].Pos, ScoreDataStore.UserScores[i].Time, delay);
+          //  LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,ScoreDataStore.UserScores[i].Pos, ScoreDataStore.UserScores[i].Time, delay);
             delay += .05f;
 
         }
