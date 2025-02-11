@@ -24,7 +24,7 @@ public class WordHunt : MonoBehaviour
     private static extern void CreateGameResultsFromFirebase(string _info);
 
     [DllImport("__Internal")]
-    private static extern void FetchAllWordsFromFirebase();
+    public static extern void FetchAllWordsFromFirebase();
 
 
     public static WordHunt instance;
@@ -101,7 +101,6 @@ public class WordHunt : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
             FetchWordsFromFirebase(); // Calls JS function in WebGL
             FetchGameResultsFromFirebase();
-            FetchAllWordsFromFirebase();
 
 #endif
         print("Starting Time= "+ formattedScoreTime);
@@ -193,10 +192,12 @@ public class WordHunt : MonoBehaviour
 
     public void OnAllUserInfoReceived(string json)
     {
+        print("Called");
         print(json);
         // Deserialize JSON and process user info
         UserInfo users = JsonUtility.FromJson<UserInfo>(json);
              ScoreDataStore.UserScores.AddRange(users.data);
+        DisplayLeaderBoard();
 
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
@@ -578,6 +579,8 @@ public class WordHunt : MonoBehaviour
     }
     public void DisplayLeaderBoard()
     {
+
+
         float delay = 0;
         print(ScoreDataStore.UserScores.Count);
         //print();
