@@ -196,11 +196,8 @@ public class WordHunt : MonoBehaviour
         print(json);
         // Deserialize JSON and process user info
         UserInfo users = JsonUtility.FromJson<UserInfo>(json);
-       foreach (var user in users.data)
-        {
-            print(user.Name);
-            ScoreDataStore.UserScores.AddRange(users.data);
-        }
+             ScoreDataStore.UserScores.AddRange(users.data);
+
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
 
@@ -474,8 +471,9 @@ public class WordHunt : MonoBehaviour
             if (insertedWords.Count <= 0)
             {
                     Finish();
+                gamebegin = false;
                     Invoke(nameof(ShowEndScene), 2f);
-                _currentUser.Time = scoreTime.ToString();
+                _currentUser.Time = scoreTime.ToString("F2");
                 CreateGameResultsFromFirebase(JsonUtility.ToJson(_currentUser));
 
             }
@@ -581,12 +579,13 @@ public class WordHunt : MonoBehaviour
     public void DisplayLeaderBoard()
     {
         float delay = 0;
+        print(ScoreDataStore.UserScores.Count);
         //print();
         for (int i = 0; i < ScoreDataStore.UserScores.Count ; i++)
         {
             print("LeaderBoard Testing");
             print(ScoreDataStore.UserScores[i]);
-            LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,ScoreDataStore.UserScores[i].Pos, ScoreDataStore.UserScores[i].Time, delay);
+            LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,i+1, ScoreDataStore.UserScores[i].Time, delay);
             delay += .05f;
 
         }
@@ -616,7 +615,6 @@ public class WordHunt : MonoBehaviour
     }
     public void ShowEndScene()
     {
-        gamebegin = false;
         formattedScoreTime = scoreTime.ToString("F2"); 
         print(formattedScoreTime);
         endscene.SetActive(true);
