@@ -50,40 +50,27 @@ if(user.exists){
    const user=await db.collection("UserInfo").doc(id).get();
 if(user.exists){
   const userData=await user.ref.update({
-    Time
+    Time:Number(Time)
   });
   return
 }
 await db.collection("UserInfo").doc(id).set({
   Name,
   id,
-  Time
+  Time:Number(Time)
 })
   },
 
-   FetchAllWordsFromFirebase: function() {
+   FetchAllWordsFromFirebase: async function() {
     // DB Reference
     const db = firebase.firestore();
 
     // Fetch all documents from the wordlist collection
-    db.collection("UserInfo").get().then((querySnapshot) => {
-      let wordsArray = [];
-      querySnapshot.forEach((doc) => {
-         let userData = doc.data();
-      wordsArray.push({
-        id: doc.id,
-        Name: userData.Name,
-        Time: userData.Time 
-      });
-    });
+   const querySnapshot = await db.collection("UserInfo").orderBy("Time").get()
+     const wordsArray= querySnapshot.docs.map((doc) =>doc.data() );
+     console.log(wordsArray)
+    SendMessage('WordHunt', 'OnAllUserInfoReceived', JSON.stringify({data:wordsArray}));
 
-    // Sort the array in ascending order based on Time
-    wordsArray.sort((a, b) => a.Time - b.Time);
-
-    console.log("Fetched and sorted words:", wordsArray);
-    }).catch((error) => {
-      console.error("Error fetching words:", error);
-    });
   },
 
 });

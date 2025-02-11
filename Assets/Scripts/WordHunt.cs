@@ -173,7 +173,7 @@ public class WordHunt : MonoBehaviour
     public class UserInfo
     {
         [SerializeField]
-        public List<UserData> Info;
+        public List<UserData> data;
     }
     [System.Serializable]
     public class UserData
@@ -193,11 +193,13 @@ public class WordHunt : MonoBehaviour
 
     public void OnAllUserInfoReceived(string json)
     {
+        print(json);
         // Deserialize JSON and process user info
         UserInfo users = JsonUtility.FromJson<UserInfo>(json);
-        foreach (var user in users.Info)
+       foreach (var user in users.data)
         {
-            ScoreDataStore.UserScores.AddRange(users.Info);
+            print(user.Name);
+            ScoreDataStore.UserScores.AddRange(users.data);
         }
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
@@ -584,7 +586,7 @@ public class WordHunt : MonoBehaviour
         {
             print("LeaderBoard Testing");
             print(ScoreDataStore.UserScores[i]);
-          //  LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,ScoreDataStore.UserScores[i].Pos, ScoreDataStore.UserScores[i].Time, delay);
+            LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,ScoreDataStore.UserScores[i].Pos, ScoreDataStore.UserScores[i].Time, delay);
             delay += .05f;
 
         }
