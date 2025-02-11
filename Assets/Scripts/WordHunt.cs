@@ -23,6 +23,9 @@ public class WordHunt : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void CreateGameResultsFromFirebase(string _info);
 
+    [DllImport("__Internal")]
+    private static extern void FetchAllWordsFromFirebase();
+
 
     public static WordHunt instance;
     public GameObject endscene;
@@ -98,6 +101,8 @@ public class WordHunt : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
             FetchWordsFromFirebase(); // Calls JS function in WebGL
             FetchGameResultsFromFirebase();
+            FetchAllWordsFromFirebase();
+
 #endif
         print("Starting Time= "+ formattedScoreTime);
         endscene.SetActive(false);
@@ -184,6 +189,16 @@ public class WordHunt : MonoBehaviour
 
     //    ScoreDataStore.UserScores.AddRange(user.Info);
       //  ScoreDataStore.UserScores.Sort((x, y) => x.Pos.CompareTo(y.Pos));
+    }
+
+    public void OnAllUserInfoReceived(string json)
+    {
+        // Deserialize JSON and process user info
+        UserInfo users = JsonUtility.FromJson<UserInfo>(json);
+        foreach (var user in users.Info)
+        {
+            ScoreDataStore.UserScores.AddRange(users.Info);
+        }
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
 
@@ -608,7 +623,9 @@ public class WordHunt : MonoBehaviour
     {
         timer.SetActive(true);
     }
- 
+    
+
+
 
 
 }
