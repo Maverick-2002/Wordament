@@ -436,7 +436,7 @@ public class WordHunt : MonoBehaviour
                 Finish();
                 gamebegin = false;
                 Invoke(nameof(ShowEndScene), 2f);
-                if (float.Parse(_currentUser.Time) > scoreTime ) {
+                if (float.Parse(_currentUser.Time) > scoreTime || float.Parse(_currentUser.Time) == 0 ) {
                     _currentUser.Time = scoreTime.ToString("F2");
                 }
                 CreateGameResultsFromFirebase(JsonUtility.ToJson(_currentUser));
