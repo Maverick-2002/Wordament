@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Runtime.InteropServices;
-using UnityEngine.Rendering;
-using System.Threading;
-using static WordHunt;
-using System.Net.NetworkInformation;
-using UnityEngine.SocialPlatforms;
 
 public class WordHunt : MonoBehaviour
 {
@@ -57,9 +50,6 @@ public class WordHunt : MonoBehaviour
     public List<string> words = new List<string>();
     public List<string> insertedWords = new List<string>();
     public List<string> CategoryWords = new List<string>();
-    /* public static List<string> SName = new List<string>();
-     public static List<int> SPos = new List<int>();
-     public static List<string> STime = new List<string>();*/
     public static class ScoreDataStore
     {
         public static List<UserData> UserScores = new List<UserData>();
@@ -103,12 +93,10 @@ public class WordHunt : MonoBehaviour
             FetchGameResultsFromFirebase();
 
 #endif
-        print("Starting Time= "+ formattedScoreTime);
         endscene.SetActive(false);
         hvlayout = GetComponent<HVLayoutGroup>();
         ScoreDataStore.UserScores.Clear();
         timer.SetActive(false);
-
     }
     public void Update()
     {
@@ -119,8 +107,7 @@ public class WordHunt : MonoBehaviour
        if (gamebegin == true)
         {
             scoreTime += Time.deltaTime;
-            timer.GetComponentInChildren<Text>().text = "Time: " + scoreTime.ToString("F2");
-            
+            timer.GetComponentInChildren<Text>().text = "Time: " + scoreTime.ToString("F2"); 
         }
     }
    //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
@@ -144,7 +131,6 @@ public class WordHunt : MonoBehaviour
 
     public void OnWordsReceived(string wordsJson)
     {
-        print("Received words from Firebase: " + wordsJson);
         Wordlist wordlist = JsonUtility.FromJson<Wordlist>(wordsJson);
         DisplayQuizSelectedWords();
         foreach (var wordData in wordlist.Data)
@@ -152,10 +138,7 @@ public class WordHunt : MonoBehaviour
             print("Category: " + wordData.CatagoryName);
             CategoryWords.Add(wordData.CatagoryName);
 
-            WordDataStore.CategoryWords.Add(wordData.CatagoryName);  // Store category names
-            print("Words in this category:");
-
-            // Store words associated with the category
+            WordDataStore.CategoryWords.Add(wordData.CatagoryName);
             if (!WordDataStore.CategoryWordMap.ContainsKey(wordData.CatagoryName))
             {
                 WordDataStore.CategoryWordMap[wordData.CatagoryName] = new List<string>();
@@ -163,8 +146,7 @@ public class WordHunt : MonoBehaviour
 
             foreach (var word in wordData.words)
             {
-                print(word);
-                WordDataStore.CategoryWordMap[wordData.CatagoryName].Add(word);  // Store words for the category
+                WordDataStore.CategoryWordMap[wordData.CatagoryName].Add(word);
             }
         }
     }
@@ -183,28 +165,18 @@ public class WordHunt : MonoBehaviour
     }
      public void OnGameResultsReceived(string json)
     {
-        print("Received data from Firebase: " + json);
         _currentUser = JsonUtility.FromJson<UserData>(json);
-
-    //    ScoreDataStore.UserScores.AddRange(user.Info);
-      //  ScoreDataStore.UserScores.Sort((x, y) => x.Pos.CompareTo(y.Pos));
     }
 
     public void OnAllUserInfoReceived(string json)
     {
-        print("Called");
-        print(json);
-        // Deserialize JSON and process user info
         UserInfo users = JsonUtility.FromJson<UserInfo>(json);
-             ScoreDataStore.UserScores.AddRange(users.data);
+        ScoreDataStore.UserScores.AddRange(users.data);
         DisplayLeaderBoard();
-
     }
     //----------------------------- JSLIB FUNCTIONS -------------------------------------------------------------------------
-
     public void Setup()
     {
-
         InitializeGrid();
 
         InsertWordsOnGrid();
@@ -215,7 +187,6 @@ public class WordHunt : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
-
     [System.Serializable]
     public class WordListData
     {
@@ -337,7 +308,7 @@ public class WordHunt : MonoBehaviour
                 inserted = InsertWord(word, row, column, dirX, dirY);
                 tryAmount++;
 
-            } while (!inserted && tryAmount < 100);
+            } while (!inserted && tryAmount < 500);
 
             if (inserted)
             {
@@ -357,7 +328,6 @@ public class WordHunt : MonoBehaviour
             lettersGrid[(i * dirX) + row, (i * dirY) + column] = word[i].ToString();
             Transform t = lettersTransforms[(i * dirX) + row, (i * dirY) + column];
             t.GetComponentInChildren<Text>().text = word[i].ToString().ToUpper();
-            //t.GetComponent<Image>().color = Color.grey;
         }
 
         return true;
@@ -407,10 +377,8 @@ public class WordHunt : MonoBehaviour
 
         return true;
     }
-
-    private void RandomizeEmptyCells()
+   private void RandomizeEmptyCells()
     {
-
         System.Random rn = new System.Random();
 
         for (int x = 0; x < gridSize.x; x++)
@@ -424,9 +392,7 @@ public class WordHunt : MonoBehaviour
                 }
             }
         }
-
     }
-
     public void LetterClick(int x, int y, bool state)
     {
         activated = state;
@@ -437,18 +403,14 @@ public class WordHunt : MonoBehaviour
         {
             ValidateWord();
         }
-
     }
-
     private void ValidateWord()
     {
         word = string.Empty;
-
         foreach (Transform t in highlightedObjects)
         {
             word += t.GetComponentInChildren<Text>().text.ToLower();
         }
-
         if (insertedWords.Contains(word) || insertedWords.Contains(Reverse(word)))
         {
             foreach (Transform h in highlightedObjects)
@@ -471,9 +433,9 @@ public class WordHunt : MonoBehaviour
 
             if (insertedWords.Count <= 0)
             {
-                    Finish();
+                Finish();
                 gamebegin = false;
-                    Invoke(nameof(ShowEndScene), 2f);
+                Invoke(nameof(ShowEndScene), 2f);
                 _currentUser.Time = scoreTime.ToString("F2");
                 CreateGameResultsFromFirebase(JsonUtility.ToJson(_currentUser));
 
@@ -499,7 +461,6 @@ public class WordHunt : MonoBehaviour
 
     private void HighlightSelectedLetters(int x, int y)
     {
-
         ClearWordSelection();
         Color selectColor = HighlightBehaviour.instance.colors[HighlightBehaviour.instance.colorCounter];
         if (x == orig.x)
@@ -571,10 +532,8 @@ public class WordHunt : MonoBehaviour
         print(CategoryWords.Count);
         for (int i = 0; i < CategoryWords.Count; i++)
         {
-            print("Testing");
             QuizScroll.instance.SpawnQuizCell(CategoryWords[i], delay);
             delay += .05f;
-           
         }
     }
     public void DisplayLeaderBoard()
@@ -583,14 +542,11 @@ public class WordHunt : MonoBehaviour
 
         float delay = 0;
         print(ScoreDataStore.UserScores.Count);
-        //print();
         for (int i = 0; i < ScoreDataStore.UserScores.Count ; i++)
         {
-            print("LeaderBoard Testing");
             print(ScoreDataStore.UserScores[i]);
             LeaderBoard.instance.SpawnLeaderBoard(ScoreDataStore.UserScores[i].Name,i+1, ScoreDataStore.UserScores[i].Time, delay);
             delay += .05f;
-
         }
     }
     public void ClearWords()
@@ -619,16 +575,10 @@ public class WordHunt : MonoBehaviour
     public void ShowEndScene()
     {
         formattedScoreTime = scoreTime.ToString("F2"); 
-        print(formattedScoreTime);
         endscene.SetActive(true);
     }
     public void Timer()
     {
         timer.SetActive(true);
     }
-    
-
-
-
-
 }

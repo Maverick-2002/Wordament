@@ -21,13 +21,11 @@ public class MenuScript : MonoBehaviour {
         canvas = GetComponent<CanvasGroup>();
         canvas.alpha = 1;     
     }
-
     public void StartGame(){
         canvas.alpha = 0;
         canvas.blocksRaycasts = false;
         miniMenu.DOMoveY(0,.6f).SetEase(Ease.OutBack);
     }
-
     public void Home()
     {
         QuizScroll.instance.ResetQuizScroll();
@@ -36,6 +34,4 @@ public class MenuScript : MonoBehaviour {
         WordDataStore.CategoryWordMap.Clear();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
-
 }

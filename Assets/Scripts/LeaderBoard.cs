@@ -1,6 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,11 +23,11 @@ public class LeaderBoard : MonoBehaviour
     public void SpawnLeaderBoard(string name, int pos , string time , float delay)
     {
         GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);
-        print("LeaderBoard spawned");
         Text[] textComponents = cell.GetComponentsInChildren<Text>();
         textComponents[0].text = pos.ToString();
         textComponents[1].text = name;
-        textComponents[2].text = float.Parse(time).ToString("F2");
+        float time2 = float.Parse(time);
+        textComponents[2].text = time2.ToString("F2");
         cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutBack).From().SetDelay(delay);
     }
 }

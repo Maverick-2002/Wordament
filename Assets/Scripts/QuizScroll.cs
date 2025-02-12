@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using System;
-using System.Reflection;
 using static WordHunt;
 
 public class QuizScroll : MonoBehaviour
@@ -39,7 +36,6 @@ public class QuizScroll : MonoBehaviour
     public void SpawnQuizCell(string word, float delay)
     {
         GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);
-        print("Button spawned");
         Button cellButton = cell.GetComponent<Button>();
         cell.GetComponentInChildren<Text>().text = word.ToUpper();
         cellButton.onClick.AddListener(() => SpawnWordsFromCategory(word));
